@@ -5,6 +5,7 @@ dotenv.config();
 import { ConnectMongoDb, getCachedDb } from "./mongodb";
 import authRoute from "./routes/auth";
 import userRoute from "./routes/user";
+import nasaRoute from "./routes/nasa";
 
 // Connect to MongoDB
 ConnectMongoDb();
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true })); // Parse request bodies as URL 
 // Routes
 app.use("/api/auth", authRoute); // Authentication routes
 app.use("/api/users", userRoute); // User routes
+app.use("/api/nasa", nasaRoute); // NASA routes
 
 // Default route
 app.get("/", (req, res) => {
