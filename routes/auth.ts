@@ -89,4 +89,33 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/getAccount", async (req: Request, res: Response) => {
+  try {
+    // Extract the token from the request header
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      return res.status(401).json("Missing token");
+    }
+
+    // Verify the token
+    const decodedToken: any = jwt.verify(token, process.env.JWT_SEC_KEY!);
+
+    // Retrieve the user based on the decoded token
+    const user = await User.findById(decodedToken.id);
+
+    if (!user) {
+      return res.status(401).json("User not found");
+    }
+
+    // Return the user data
+    const { password, ...userData } = user.toObject();
+    res.status(200).json(userData);
+  } catch (err: any) {
+    res.status(500).json(err);
+    console.log(err);
+  }
+});
+
+
 export default router;
